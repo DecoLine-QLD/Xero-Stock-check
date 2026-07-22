@@ -1,0 +1,17 @@
+{
+    "devCommand": "node node_modules/vite/bin/vite.js --port $PORT",
+    "rewrites": [
+        {
+            "source": "/api/stock",
+            "destination": "/api/stock"
+        },
+        {
+            "source": "/api/auth",
+            "destination": "/api/auth"
+        },
+        {
+            "source": "/api/callback",
+            "destination": "/api/callback"
+        }
+    ]
+}
