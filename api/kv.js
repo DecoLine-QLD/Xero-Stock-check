@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let KV_URL = process.env.KV_REST_API_URL || process.env.KV_URL;
+let KV_URL = process.env.KV_REST_API_URL || process.env.KV_URL || process.env.REDIS_URL;
 let KV_TOKEN = process.env.KV_REST_API_TOKEN;
 
 // If URL has redis:// or rediss:// protocol, parse and transform it into https:// REST API URL
