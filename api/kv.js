@@ -7,16 +7,21 @@ let KV_TOKEN = process.env.KV_REST_API_TOKEN;
 if (KV_URL && (KV_URL.startsWith('redis://') || KV_URL.startsWith('rediss://'))) {
   try {
     const cleanUrl = KV_URL.replace('redis://', '').replace('rediss://', '');
-    const [authPart, hostPart] = cleanUrl.split('@');
+    const lastAtIndex = cleanUrl.lastIndexOf('@');
     
-    if (hostPart) {
-      const host = hostPart.split(':')[0];
-      KV_URL = `https://${host}`;
-    }
-    
-    if (!KV_TOKEN && authPart) {
-      const token = authPart.split(':')[1] || authPart;
-      KV_TOKEN = token;
+    if (lastAtIndex !== -1) {
+      const authPart = cleanUrl.substring(0, lastAtIndex);
+      const hostPart = cleanUrl.substring(lastAtIndex + 1);
+      
+      if (hostPart) {
+        const host = hostPart.split(':')[0].split('/')[0];
+        KV_URL = `https://${host}`;
+      }
+      
+      if (!KV_TOKEN && authPart) {
+        const token = authPart.split(':')[1] || authPart;
+        KV_TOKEN = token;
+      }
     }
   } catch (err) {
     console.error('Failed to auto-parse Vercel KV Redis URL:', err.message);
