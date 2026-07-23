@@ -13,7 +13,7 @@ export default function handler(req, res) {
     'profile',
     'email',
     'accounting.settings.read',
-    'accounting.transactions.read',
+    'accounting.invoices.read',
     'offline_access'
   ].join(' ');
 
