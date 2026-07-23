@@ -1,7 +1,27 @@
 import axios from 'axios';
 
-const KV_URL = process.env.KV_REST_API_URL;
-const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+let KV_URL = process.env.KV_REST_API_URL || process.env.KV_URL;
+let KV_TOKEN = process.env.KV_REST_API_TOKEN;
+
+// If URL has redis:// or rediss:// protocol, parse and transform it into https:// REST API URL
+if (KV_URL && (KV_URL.startsWith('redis://') || KV_URL.startsWith('rediss://'))) {
+  try {
+    const cleanUrl = KV_URL.replace('redis://', '').replace('rediss://', '');
+    const [authPart, hostPart] = cleanUrl.split('@');
+    
+    if (hostPart) {
+      const host = hostPart.split(':')[0];
+      KV_URL = `https://${host}`;
+    }
+    
+    if (!KV_TOKEN && authPart) {
+      const token = authPart.split(':')[1] || authPart;
+      KV_TOKEN = token;
+    }
+  } catch (err) {
+    console.error('Failed to auto-parse Vercel KV Redis URL:', err.message);
+  }
+}
 
 export const kv = {
   async get(key) {
