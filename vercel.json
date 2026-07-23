@@ -1,5 +1,10 @@
 {
     "devCommand": "node node_modules/vite/bin/vite.js --port $PORT",
+    "functions": {
+        "api/*.js": {
+            "maxDuration": 60
+        }
+    },
     "rewrites": [
         {
             "source": "/api/stock",
